@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const src = path.join(__dirname, 'src');
 const dist = path.join(__dirname, 'dist');
@@ -12,9 +14,9 @@ module.exports = {
   },
   resolve: {
     modules: ['node_modules'], //import文のパス指定にnode_modulesを省略する
-    extensions: ['.js','.jsx'] //.js .jsx を省略可能
+    extensions: ['.js', '.jsx'] //.js .jsx を省略可能
   },
-  modules: {
+  module: {
     rules: [
       {
         test: /\.(js|jsx)$/, //ルールを適用するファイルの正規表現
@@ -22,5 +24,14 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
-  }
+  },
+  devServer: {
+    contentBase: dist, //開発サーバのディレクトリ
+    hot: true, //hot-reloadを有効
+    port: 3000
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(), //hot-reloadを有効にするプラグイン
+    new HtmlWebpackPlugin()
+  ]
 };
